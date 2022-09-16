@@ -1,0 +1,21 @@
+version: '3'
+services:
+  dagen_market:
+    image: node:16.10.0-stretch-slim
+    container_name: chainlist
+    restart: always
+    environment:
+      VIRTUAL_HOST: chainlist.wallet3.io
+      VIRTUAL_PORT: 3000
+      LETSENCRYPT_HOST: chainlist.wallet3.io
+      LETSENCRYPT_EMAIL: lilong@chainbow.io
+    ports:
+      - "3000:3000"
+    command: yarn run start
+    networks:
+      - shared
+
+networks:
+  default:
+    external:
+      name: shared
