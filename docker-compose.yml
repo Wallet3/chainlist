@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dagen_market:
+  chainlist:
     image: node:16.10.0-stretch-slim
     container_name: chainlist
     restart: always
@@ -16,6 +16,5 @@ services:
       - shared
 
 networks:
-  default:
-    external:
-      name: shared
+  shared:
+    external: true
