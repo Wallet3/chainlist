@@ -59,6 +59,7 @@
   8217: "klaytn",
   9001: "evmos",
   10000: "smartbch",
+  10001: "ethereumpow",
   900000: "posichain",
   103090: "crystaleum",
   32659: "fusion",

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "ETHW Mainnet",
+    "chain": "ETHW",
+    "icon": "ethereum",
+    "rpc": [
+      "https://mainnet.ethereumpow.org"
+    ],
+    "faucets": [],
+    "nativeCurrency": {
+      "name": "ETHW",
+      "symbol": "ETHW",
+      "decimals": 18
+    },
+    "infoURL": "https://ethereumpow.org/",
+    "shortName": "ETHW",
+    "chainId": 10001,
+    "explorers": [
+      {
+        "name": "oklink",
+        "url": "https://www.oklink.com/en/ethw"
+      }
+    ]
+  }
+]
