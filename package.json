@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
-    "build2": "next build && next export",
-    "start": "next start"
+    "dev": "npx next dev",
+    "build": "npx next build",
+    "export": "npx next export",
+    "build2": "npx next build && npx next export",
+    "start": "npx next start"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",

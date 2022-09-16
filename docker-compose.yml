@@ -11,6 +11,9 @@ services:
       LETSENCRYPT_EMAIL: lilong@chainbow.io
     ports:
       - "3000:3000"
+    working_dir: /home/deploy/chainlist
+    volumes:
+      - ./:/home/deploy/chainlist
     command: yarn run start
     networks:
       - shared
