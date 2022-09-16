@@ -6,7 +6,7 @@ services:
     tty: true
     volumes:
       - .:/app
-    command: sh -c "yarn run start"
+    command: sh -c "yarn && yarn run start"
     restart: always
     environment:
       VIRTUAL_HOST: chainlist.wallet3.io
