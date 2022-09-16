@@ -6,8 +6,8 @@ cd $WORK_DIR
 
 git pull origin main
 
-yarn
-yarn run build
+npx yarn
+npx yarn build
 
 docker-compose build
 docker-compose down
