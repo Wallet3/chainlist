@@ -1,8 +1,12 @@
 version: '3'
 services:
-  chainlist:
-    image: node:16.10.0-stretch-slim
-    container_name: chainlist
+  app:
+    build:
+      context: .
+    tty: true
+    volumes:
+      - .:/app
+    command: sh -c "yarn run start"
     restart: always
     environment:
       VIRTUAL_HOST: chainlist.wallet3.io
@@ -11,10 +15,6 @@ services:
       LETSENCRYPT_EMAIL: lilong@chainbow.io
     ports:
       - "3000:3000"
-    working_dir: /home/deploy/chainlist
-    volumes:
-      - ./:/home/deploy/chainlist
-    command: yarn run start
     networks:
       - shared
 
