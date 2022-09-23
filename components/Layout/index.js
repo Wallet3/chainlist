@@ -32,8 +32,8 @@ export default function Layout({ changeTheme, theme, children }) {
               : classes.container
           }
         >
-          <div className={classes.copyContainer}>
-            <div className={classes.copyCentered}>
+          <div>
+            <div>
             <img style={{
                 width: '360px',
                 marginLeft: '-15px',
@@ -45,7 +45,7 @@ export default function Layout({ changeTheme, theme, children }) {
               <Typography className={classes.subTitle}>
                 {t("description")}
               </Typography>
-              <Button
+              {/* <Button
                 size="large"
                 color="primary"
                 variant="contained"
@@ -68,8 +68,8 @@ export default function Layout({ changeTheme, theme, children }) {
                 <Typography className={classes.buttonLabel}>
                   {t("add-your-rpc")}
                 </Typography>
-              </Button>
-              <div className={classes.socials}>
+              </Button> */}
+              {/* <div className={classes.socials}>
                 <a
                   className={`${classes.socialButton}`}
                   href="https://github.com/DefiLlama/chainlist"
@@ -86,7 +86,7 @@ export default function Layout({ changeTheme, theme, children }) {
                     {t("view-source-code")}
                   </Typography>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
           <div
