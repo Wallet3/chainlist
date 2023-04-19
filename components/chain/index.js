@@ -35,6 +35,12 @@ export default function Chain({ chain, buttonOnly, lang }) {
 
   const address = accountData?.address ?? null;
 
+  const [provider, setProvider] = React.useState('')
+  React.useEffect(() => {
+    setProvider(renderProviderText(address))
+  }, [address])
+
+
   const { mutate: addToNetwork } = useAddToNetwork();
 
   if (!chain) {
@@ -47,7 +53,7 @@ export default function Chain({ chain, buttonOnly, lang }) {
         className="border dark:border-[#171717] border-[#EAEAEA] px-4 py-2 rounded-[50px] dark:text-[#2F80ED] text-[#2F80ED] dark:hover:text-black hover:text-white dark:hover:bg-[#2F80ED] hover:bg-[#2F80ED] w-fit mx-auto"
         onClick={() => addToNetwork({ address, chain })}
       >
-        {t(renderProviderText(address))}
+        {t(provider)}
       </button>
     );
   }
@@ -89,7 +95,7 @@ export default function Chain({ chain, buttonOnly, lang }) {
           className="border dark:border-[#171717] border-[#EAEAEA] px-4 py-2 rounded-[50px] mb-auto dark:text-[#2F80ED] text-[#2F80ED] dark:hover:text-black hover:text-white dark:hover:bg-[#2F80ED] hover:bg-[#2F80ED] w-fit mx-auto"
           onClick={() => addToNetwork({ address, chain })}
         >
-          {t(renderProviderText(address))}
+          {t(provider)}
         </button>
 
         {(lang === "en" ? router.pathname === "/" : router.pathname === "/zh") && (

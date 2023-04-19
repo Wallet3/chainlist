@@ -4,5 +4,6 @@ export const walletIcons = {
   Metamask: "/connectors/icn-metamask.svg",
   imToken: "/connectors/icn-imtoken.svg",
   Wallet: "/connectors/icn-metamask.svg",
+  Wallet3: "/connectors/icn-wallet3.svg",
   "Trust Wallet": "/connectors/icon-trust.svg",
 };

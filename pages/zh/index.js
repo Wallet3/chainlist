@@ -4,11 +4,20 @@ import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import Chain from "../../components/chain";
 import { fetcher, populateChain } from "../../utils/fetch";
+import customChainIds from "../../constants/customChains.json"
 
 export async function getStaticProps() {
   const chains = await fetcher("https://chainid.network/chains.json");
   const chainTvls = await fetcher("https://api.llama.fi/chains");
 
+  customChainIds.forEach(item => {
+    if(!chains.find(
+      (c) =>
+        c.chainId?.toString() === item.chainId
+    )){
+      chains.push(item)
+    }
+  });
   const sortedChains = chains
     .filter((c) => c.name !== "420coin") // same chainId as ronin
     .map((chain) => populateChain(chain, chainTvls))

@@ -8,11 +8,21 @@ import AddNetwork from "../../components/chain";
 import Layout from "../../components/Layout";
 import RPCList from "../../components/RPCList";
 import chainIds from "../../constants/chainIds.json";
+import customChainIds from "../../constants/customChains.json"
 
 export async function getStaticProps({ params }) {
   const chains = await fetcher("https://chainid.network/chains.json");
 
   const chainTvls = await fetcher("https://api.llama.fi/chains");
+
+  customChainIds.forEach(item => {
+    if(!chains.find(
+      (c) =>
+        c.chainId?.toString() === item.chainId
+    )){
+      chains.push(item)
+    }
+  });
 
   const chain = chains.find(
     (c) =>
@@ -26,6 +36,8 @@ export async function getStaticProps({ params }) {
       notFound: true,
     };
   }
+
+
 
   return {
     props: {

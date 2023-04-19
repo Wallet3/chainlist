@@ -1,6 +1,7 @@
 import allExtraRpcs from "../constants/extraRpcs.js";
 import chainIds from "../constants/chainIds.json" assert { type: "json" };
 import fetch from "node-fetch"
+import customChainIds from "../constants/customChains.json"
 
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -98,6 +99,14 @@ export function arrayMove(array, fromIndex, toIndex) {
 export async function generateChainData(){
     const chains = await fetcher("https://chainid.network/chains.json");
     const chainTvls = await fetcher("https://api.llama.fi/chains");
+    customChainIds.forEach(item => {
+      if(!chains.find(
+        (c) =>
+          c.chainId?.toString() === item.chainId
+      )){
+        chains.push(item)
+      }
+    });
   
     const sortedChains = chains
       .filter((c) => c.name !== "420coin") // same chainId as ronin
