@@ -2,12 +2,12 @@ import * as React from "react";
 import Head from "next/head";
 import Link from "next/link";
 // import { useTranslations } from "next-intl";
-import { notTranslation as useTranslations } from "../../utils";
-import { populateChain, fetcher } from "../../utils/fetch";
-import AddNetwork from "../../components/chain";
-import Layout from "../../components/Layout";
-import RPCList from "../../components/RPCList";
-import chainIds from "../../constants/chainIds.json";
+import { notTranslation as useTranslations } from "../../../utils";
+import { populateChain, fetcher } from "../../../utils/fetch";
+import AddNetwork from "../../../components/chain";
+import Layout from "../../../components/Layout";
+import RPCList from "../../../components/RPCList";
+import chainIds from "../../../constants/chainIds.json";
 
 export async function getStaticProps({ params }) {
   const chains = await fetcher("https://chainid.network/chains.json");
@@ -30,7 +30,7 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       chain: chain ? populateChain(chain, chainTvls) : null,
-      // messages: (await import(`../../translations/${locale}.json`)).default,
+      // messages: (await import(`../../../translations/${locale}.json`)).default,
     },
     revalidate: 3600,
   };
@@ -58,7 +58,7 @@ export async function getStaticPaths() {
 }
 
 function Chain({ chain }) {
-  const t = useTranslations("Common", "en");
+  const t = useTranslations("Common", "zh");
 
   const icon = React.useMemo(() => {
     return chain?.chainSlug ? `https://icons.llamao.fi/icons/chains/rsz_${chain.chainSlug}.jpg` : "/unknown-logo.png";
@@ -75,7 +75,7 @@ function Chain({ chain }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout lang="en">
+      <Layout lang="zh">
         <div className="shadow dark:bg-[#0D0D0D] bg-white p-8 rounded-[10px] flex flex-col gap-3 overflow-hidden">
           <Link href={`/chain/${chain.chainId}`} prefetch={false} className="flex items-center mx-auto gap-2">
             <img
@@ -97,7 +97,7 @@ function Chain({ chain }) {
             </thead>
             <tbody>
               <tr>
-                <td className="text-center font-bold px-4 dark:text-[#B3B3B3]">{`${chain.chainId}(0x${Number(chain.chainId).toString(16)})`}</td>
+                <td className="text-center font-bold px-4 dark:text-[#B3B3B3]">{chain.chainId}</td>
                 <td className="text-center font-bold px-4 dark:text-[#B3B3B3]">
                   {chain.nativeCurrency ? chain.nativeCurrency.symbol : "none"}
                 </td>
@@ -105,10 +105,10 @@ function Chain({ chain }) {
             </tbody>
           </table>
 
-          <AddNetwork chain={chain} buttonOnly lang="en" />
+          <AddNetwork chain={chain} buttonOnly lang="zh" />
         </div>
 
-        <RPCList chain={chain} lang="en" />
+        <RPCList chain={chain} lang="zh" />
       </Layout>
     </>
   );
