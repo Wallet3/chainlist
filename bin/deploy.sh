@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORK_DIR=/home/deploy/chainlist
+WORK_DIR=/home/deploy/chainlist.wallet3.io
 
 cd $WORK_DIR
 
