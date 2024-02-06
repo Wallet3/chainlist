@@ -9,6 +9,6 @@ git pull origin main
 npx yarn
 npx yarn build
 
-docker-compose build
-docker-compose down
-docker-compose up -d #--scale back=3
+docker compose build
+docker compose down
+docker compose up -d #--scale back=3
