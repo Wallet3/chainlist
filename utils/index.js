@@ -31,6 +31,8 @@ export function getProvider() {
   if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
     if (window.ethereum.isCoinbaseWallet || window.ethereum.selectedProvider?.isCoinbaseWallet)
       return "Coinbase Wallet";
+    if (window.ethereum.isXDEFI) return "XDEFI";
+    if (window.ethereum.isTally) return "Taho";
     if (window.ethereum.isBraveWallet) return "Brave Wallet";
     if (window.ethereum.isWallet3) return "Wallet3";
     if (window.ethereum.isMetaMask) return "Wallet3";
@@ -68,10 +70,12 @@ export const renderProviderText = (address) => {
     const providerTextList = {
       Wallet3: "add-to-Wallet3",
       Metamask: "add-to-metamask",
+      XDEFI: "add-to-xdefi",
       imToken: "add-to-imToken",
       Wallet: "add-to-wallet",
       "Brave Wallet": "add-to-brave",
       "Coinbase Wallet": "add-to-coinbase",
+      Taho: "add-to-taho",
       "Trust Wallet": "add-to-trust",
     };
     return providerTextList[getProvider()];

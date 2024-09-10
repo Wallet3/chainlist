@@ -7,9 +7,10 @@ import useAddToNetwork from "../../hooks/useAddToNetwork";
 import { useClipboard } from "../../hooks/useClipboard";
 import { useLlamaNodesRpcData } from "../../hooks/useLlamaNodesRpcData";
 import { FATHOM_DROPDOWN_EVENTS_ID } from "../../hooks/useAnalytics";
-import { useAccount, useRpcStore } from "../../stores";
+import { useRpcStore } from "../../stores";
 import { renderProviderText } from "../../utils";
 import { Tooltip } from "../../components/Tooltip";
+import useAccount from "../../hooks/useAccount";
 
 export default function RPCList({ chain, lang }) {
   const [sortChains, setSorting] = useState(true);
@@ -58,7 +59,7 @@ export default function RPCList({ chain, lang }) {
       let trust = "transparent";
       let disableConnect = false;
 
-      if (!height || !latency || topRpc.height - height > 3 || topRpc.latency - latency > 5000) {
+      if (!height || !latency || topRpc.height - height > 3 || latency - topRpc.latency > 5000) {
         trust = "red";
       } else if (topRpc.height - height < 2 && topRpc.latency - latency > -600) {
         trust = "green";
@@ -79,25 +80,8 @@ export default function RPCList({ chain, lang }) {
 
   const { rpcData, hasLlamaNodesRpc } = useLlamaNodesRpcData(chain.chainId, data);
 
-  const isEthMainnet = chain?.name === "Ethereum Mainnet";
-
   return (
     <div className="shadow dark:bg-[#0D0D0D] bg-white p-8 rounded-[10px] flex flex-col gap-3 overflow-hidden col-span-full relative overflow-x-auto">
-      {isEthMainnet && (
-        <p className="text-center">
-          Follow{" "}
-          <a
-            href="https://docs.llama.fi/chainlist/how-to-change-ethereums-rpc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            this guide
-          </a>{" "}
-          to change RPC endpoint's of Ethereum Mainnet
-        </p>
-      )}
-
       <table className="m-0 border-collapse whitespace-nowrap dark:text-[#B3B3B3] text-black">
         <caption className="relative w-full px-3 py-1 text-base font-medium border border-b-0">
           <span className="mr-4">{`${chain.name} RPC URL List`}</span>
@@ -136,23 +120,22 @@ export default function RPCList({ chain, lang }) {
 
         <tbody>
           {rpcData.map((item, index) => {
-            let className = 'bg-inherit';
+            let className = "bg-inherit";
 
             if (hasLlamaNodesRpc && index === 0) {
-              className = 'dark:bg-[#0D0D0D] bg-[#F9F9F9]';
+              className = "dark:bg-[#0D0D0D] bg-[#F9F9F9]";
             }
 
             return (
               <Row
                 values={item}
                 chain={chain}
-                isEthMainnet={isEthMainnet}
-                key={index}
+                key={"rpc" + index}
                 privacy={urlToData[item.data.url]}
                 lang={lang}
                 className={className}
               />
-            )
+            );
           })}
         </tbody>
       </table>
@@ -181,13 +164,12 @@ function PrivacyIcon({ tracking, isOpenSource = false }) {
   return <EmptyIcon />;
 }
 
-const Row = ({ values, chain, isEthMainnet, privacy, lang, className }) => {
+const Row = ({ values, chain, privacy, lang, className }) => {
   const t = useTranslations("Common", lang);
   const { data, isLoading, refetch } = values;
 
   const rpcs = useRpcStore((state) => state.rpcs);
   const addRpc = useRpcStore((state) => state.addRpc);
-  const account = useAccount((state) => state.account);
 
   useEffect(() => {
     // ignore first request to a url and refetch to calculate latency which doesn't include DNS lookup
@@ -225,27 +207,23 @@ const Row = ({ values, chain, isEthMainnet, privacy, lang, className }) => {
           </>
         )}
       </td>
-        <td className="px-3 py-1 text-sm border">
-          <Tooltip content={privacy?.trackingDetails || t('no-privacy-info')}>
-            {isLoading ? <Shimmer /> : <PrivacyIcon tracking={privacy?.tracking} isOpenSource={privacy?.isOpenSource} />}
-          </Tooltip>
-        </td>
+      <td className="px-3 py-1 text-sm border">
+        <Tooltip content={privacy?.trackingDetails || t("no-privacy-info")}>
+          {isLoading ? <Shimmer /> : <PrivacyIcon tracking={privacy?.tracking} isOpenSource={privacy?.isOpenSource} />}
+        </Tooltip>
+      </td>
       <td className="px-3 py-1 text-sm text-center border">
         {isLoading ? (
           <Shimmer />
         ) : (
           <>
-            {isEthMainnet ? (
-              <CopyUrl url={data?.url} />
-            ) : (
-              !data.disableConnect && (
-                <button
-                  className="px-2 py-[2px] -my-[2px] text-center text-sm dark:hover:bg-[#171717] hover:bg-[#EAEAEA] rounded-[50px]"
-                  onClick={() => addToNetwork({ address, chain, rpc: data?.url })}
-                >
-                  {t(renderProviderText(account))}
-                </button>
-              )
+            {!data.disableConnect && (
+              <button
+                className="px-2 py-[2px] -my-[2px] text-center text-sm dark:hover:bg-[#171717] hover:bg-[#EAEAEA] rounded-[50px]"
+                onClick={() => addToNetwork({ address, chain, rpc: data?.url })}
+              >
+                {t(renderProviderText(address))}
+              </button>
             )}
           </>
         )}
@@ -255,31 +233,31 @@ const Row = ({ values, chain, isEthMainnet, privacy, lang, className }) => {
 };
 
 const CopyUrl = ({ url = "" }) => {
-  const { hasCopied, onCopy } = useClipboard()
+  const { hasCopied, onCopy } = useClipboard();
 
   const handleCopy = () => {
     if (url.includes("eth.llamarpc")) {
       Fathom.trackGoal(FATHOM_DROPDOWN_EVENTS_ID[1], 0);
     }
 
-    return onCopy(url)
-  }
+    return onCopy(url);
+  };
 
   return (
     <button
       className="px-2 py-[2px] -my-[2px] text-sm dark:hover:bg-[#171717] hover:bg-[#EAEAEA] rounded-[50px] mx-auto"
       onClick={handleCopy}
     >
-      {!hasCopied ? 'Copy URL' : 'Copied!'}
+      {!hasCopied ? "Copy URL" : "Copied!"}
     </button>
   );
 };
 
 const EmptyIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" fill="none" className="w-4 h-4 mx-auto">
-    <circle cx="12.2844" cy="12.6242" r="11.0662" stroke="black" strokeWidth="1.47549" strokeDasharray="2.95 2.95"/>
+    <circle cx="12.2844" cy="12.6242" r="11.0662" stroke="black" strokeWidth="1.47549" strokeDasharray="2.95 2.95" />
   </svg>
-)
+);
 
 const RedIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="red" className="w-5 h-5 mx-auto">

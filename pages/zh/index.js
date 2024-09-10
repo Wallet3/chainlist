@@ -3,27 +3,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import Chain from "../../components/chain";
-import { fetcher, populateChain } from "../../utils/fetch";
-import customChainIds from "../../constants/customChains.json"
+import { generateChainData } from "../../utils/fetch";
 
 export async function getStaticProps() {
-  const chains = await fetcher("https://chainid.network/chains.json");
-  const chainTvls = await fetcher("https://api.llama.fi/chains");
-
-  customChainIds.forEach(item => {
-    if(!chains.find(
-      (c) =>
-        c.chainId?.toString() === item.chainId
-    )){
-      chains.push(item)
-    }
-  });
-  const sortedChains = chains
-    .filter((c) => c.name !== "420coin") // same chainId as ronin
-    .map((chain) => populateChain(chain, chainTvls))
-    .sort((a, b) => {
-      return (b.tvl ?? 0) - (a.tvl ?? 0);
-    });
+  const sortedChains = await generateChainData();
 
   return {
     props: {
@@ -71,10 +54,10 @@ function Home({ chains }) {
   return (
     <>
       <Head>
-        <title>Chainlist</title>
+        <title>ChainList</title>
         <meta
           name="description"
-          content="Chainlist is a list of RPCs for EVM(Ethereum Virtual Machine) networks. Use the information to connect your wallets and Web3 middleware providers to the appropriate Chain ID and Network ID. Find the best RPC for both Mainnet and Testnet to connect to the correct chain"
+          content="ChainList is a list of RPCs for EVM(Ethereum Virtual Machine) networks. Use the information to connect your wallets and Web3 middleware providers to the appropriate Chain ID and Network ID. Find the best RPC for both Mainnet and Testnet to connect to the correct chain"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -82,8 +65,8 @@ function Home({ chains }) {
       <Layout lang="zh">
         <React.Suspense fallback={<div className="h-screen"></div>}>
           <div className="grid gap-5 grid-cols-1 place-content-between pb-4 sm:pb-10 sm:grid-cols-[repeat(auto-fit,_calc(50%_-_15px))] 3xl:grid-cols-[repeat(auto-fit,_calc(33%_-_20px))] isolate grid-flow-dense">
-            {filteredChains.map((chain, idx) => (
-              <Chain chain={chain} key={idx} lang="zh" />
+            {filteredChains.map((chain) => (
+              <Chain chain={chain} key={JSON.stringify(chain) + "zh"} lang="zh" />
             ))}
           </div>
         </React.Suspense>
