@@ -15,9 +15,8 @@ services:
       LETSENCRYPT_EMAIL: lilong@chainbow.io
     ports:
       - "3000:3000"
-    networks:
-      - shared
 
 networks:
-  shared:
+  default:
     external: true
+    name: shared
